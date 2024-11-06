@@ -3,12 +3,12 @@ CS 1635 Group Project
 
 Key Tasks: 
 
--Login (
+-Login (Dev 3)
 
--Browse/Search movies
+-Browse/Search movies (Dev 3)
 
--Join/Create lobby
+-Join/Create lobby (Dev 3)
 
--Rank movies
+-Rank movies (Dev 3)
 
 -User statistics
