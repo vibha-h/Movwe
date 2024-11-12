@@ -1,46 +1,40 @@
-import './lobby_model.dart';
-
 class User {
-  String userId;
+  int? id;
   String username;
   String password;
   String profilePic;
   List<String> topGenres;
-  List<Lobby> lobbies;
+  List<int> lobbyIds; // List of lobby IDs (foreign keys)
 
   User({
-    required this.userId,
+    this.id,
     required this.username,
     required this.password,
     this.profilePic = '',
     this.topGenres = const [],
-    this.lobbies = const [],
+    this.lobbyIds = const [],
   });
 
-  //TODO
-  bool authenticate(String username, String password){
-    return false;
+  // Convert the User object to a map for the database
+  Map<String, dynamic> toMap() {
+    return {
+      'username': username,
+      'password': password,
+      'profilePic': profilePic,
+      'topGenres': topGenres.join(','),
+      'lobbies': lobbyIds.join(','),
+    };
   }
 
-  //TODO
-  void update(Map<String, dynamic> body){
-    return;
-  }
-
-  //TODO
-  User getProfileDetails(){
-    return this;
-  }
-
-  //TODO
-  void joinLobby(Lobby lobby){
-    lobbies.add(lobby);
-    return;
-  }
-
-  //TODO
-  void leaveLobby(Lobby lobby){
-    lobbies.remove(lobby);
-    return;
+  // Convert a map to a User object
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'],
+      username: map['username'],
+      password: map['password'],
+      profilePic: map['profilePic'],
+      topGenres: (map['topGenres'] as String).split(','),
+      lobbyIds: (map['lobbies'] as String).split(',').map((id) => int.parse(id)).toList(),
+    );
   }
 }

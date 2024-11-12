@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../views/login_view.dart';  // Import the LoginView
+import '../views/login_view.dart';
+import './viewmodels/user_viewmodel.dart';
 
 void main() {
   runApp(const MyApp());

@@ -5,9 +5,9 @@ class Lobby {
   String lobbyId;
   String joinCode;
   String qrCode;
-  String adminId;
-  List<User> memberList;
-  List<Movie> movieList;
+  int adminId;
+  List<int> memberIds;
+  List<int> movieIds;
   Map<User, List<Movie>> userRankings;
   String status;
 
@@ -16,68 +16,68 @@ class Lobby {
     required this.joinCode,
     required this.qrCode,
     required this.adminId,
-    this.memberList = const [],
-    this.movieList = const [],
+    this.memberIds = const [],
+    this.movieIds = const [],
     this.userRankings = const {},
     this.status = 'OPEN',
   });
 
-  //TODO
-  void addMovie(Movie movie){
-    movieList.add(movie);
-  }
+  // //TODO
+  // void addMovie(Movie movie){
+  //   movieList.add(movie);
+  // }
 
-  //TODO
-  void removeMovie(Movie movie){
-    movieList.remove(movie);
-  }
+  // //TODO
+  // void removeMovie(Movie movie){
+  //   movieList.remove(movie);
+  // }
 
-  //TODO
-  void addMember(User user){
-    memberList.add(user);
-    user.joinLobby(this);
-  }
+  // //TODO
+  // void addMember(User user){
+  //   memberList.add(user);
+  //   user.joinLobby(this);
+  // }
 
-  //TODO
-  void removeMember(User user){
-    memberList.remove(user);
-    user.leaveLobby(this);
-  }
+  // //TODO
+  // void removeMember(User user){
+  //   memberList.remove(user);
+  //   user.leaveLobby(this);
+  // }
 
-  //TODO
-  void updateStatus(String status){
-    this.status = status;
-  }
+  // //TODO
+  // void updateStatus(String status){
+  //   this.status = status;
+  // }
 
-  //TODO
-  void finalize(){
-    updateStatus("READY");
-  }
+  // //TODO
+  // void finalize(){
+  //   updateStatus("READY");
+  // }
 
-  //TODO
-  void deleteLobby(){
-    return;
-  }
+  // //TODO
+  // void deleteLobby(){
+  //   return;
+  // }
 
-  //TODO
-  List<Movie> calculateAverageRankings(){
-    return movieList;
-  }
+  // //TODO
+  // List<Movie> calculateAverageRankings(){
+  //   return movieList;
+  // }
 
-  //TODO
-  void addUserRanking(User user, List<Movie> ranking){
-    userRankings[user] = ranking;
-  }
+  // //TODO
+  // void addUserRanking(User user, List<Movie> ranking){
+  //   userRankings[user] = ranking;
+  // }
 
-  //TODO
-  void reset(){
-    movieList = const [];
-    userRankings = const {};
-    updateStatus("OPEN");
-  }
+  // //TODO
+  // void reset(){
+  //   movieList = const [];
+  //   userRankings = const {};
+  //   updateStatus("OPEN");
+  // }
 
-  //TODO
-  Movie selectRandomMovie(){
-    return movieList[0];
-  }
+  // //TODO
+  // Movie selectRandomMovie(){
+  //   return movieList[0];
+  // }
 }

@@ -1,34 +1,42 @@
 import '../models/user_model.dart';
-import '../models/lobby_model.dart';
+import '../services/user_database_service.dart';
 
-class UserViewmodel {
-  User? _user;
-  User? get user => _user;
+class UserViewModel {
+  final UserDatabaseService _userDatabaseService = UserDatabaseService();
 
-  Future<bool> login(String username, String password) async {
-    if (_user != null && _user!.authenticate(username, password)) {
+  // Create account
+  Future<bool> createAccount(String username, String password) async {
+    try {
+      // Create a new User model
+      final user = User(username: username, password: password, profilePic: 'image.png', topGenres: [], lobbyIds: []);
+      
+      // Save the user to the database
+      await _userDatabaseService.addUser(user);
+      
       return true;
-    } else {
+    } catch (e) {
+      print('Error: $e');
       return false;
     }
   }
 
-  void updateUserProfile(String newUsername, String profilePic) {
-    if (_user != null) {
-      _user!.update({'username': newUsername, 'profilePic': profilePic});
-    }
+  // Get a user by ID
+  Future<User?> getUser(int id) async {
+    return await _userDatabaseService.getUserById(id);
   }
 
-  void joinLobby(Lobby lobby) {
-    if (_user != null) {
-      _user!.joinLobby(lobby);
-    }
+  // Update a user
+  Future<void> updateUser(User user) async {
+    await _userDatabaseService.updateUser(user);
   }
 
-  void leaveLobby(Lobby lobby) {
-    if (_user != null) {
-      _user!.leaveLobby(lobby);
-    }
+  // Delete a user
+  Future<void> deleteUser(int id) async {
+    await _userDatabaseService.deleteUser(id);
   }
 
+  // Get all users
+  Future<List<User>> getAllUsers() async {
+    return await _userDatabaseService.getAllUsers();
+  }
 }

@@ -1,5 +1,3 @@
-import './user_model.dart';
-
 class Movie {
   String movieId;
   String moviePoster;
@@ -23,23 +21,23 @@ class Movie {
     this.numberOfSelections = 0,
   });
 
-  //TODO
-  void update(Map<String, dynamic> body){
-    return;
-  }
+  // //TODO
+  // void update(Map<String, dynamic> body){
+  //   return;
+  // }
 
-  //TODO
-  Movie getMovieDetails(){
-    return this;
-  }
+  // //TODO
+  // Movie getMovieDetails(){
+  //   return this;
+  // }
 
-  //TODO
-  void addSelection(){
-    numberOfSelections++;
-  }
+  // //TODO
+  // void addSelection(){
+  //   numberOfSelections++;
+  // }
 
-  //TODO
-  void addReview(User user, String review){
-    return;
-  }
+  // //TODO
+  // void addReview(User user, String review){
+  //   return;
+  // }
 }

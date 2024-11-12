@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './home_view.dart';
+import '../viewmodels/user_viewmodel.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -37,6 +38,19 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  // Function to show the SignUp Dialog
+  void _showSignUpDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Create Account'),
+          content: SignUpForm(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,10 +81,91 @@ class _LoginViewState extends State<LoginView> {
                 style: const TextStyle(color: Colors.red),
               ),
             ],
+            const SizedBox(height: 20),
+            TextButton(
+              onPressed: _showSignUpDialog, // Open the SignUp Dialog
+              child: const Text("Create Account"),
+            ),
           ],
         ),
       ),
     );
   }
+}
 
+// SignUpForm Widget that will be used in the Dialog
+class SignUpForm extends StatefulWidget {
+  @override
+  _SignUpFormState createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<SignUpForm> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  String? _errorMessage;
+
+  void _createAccount() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter both username and password';
+      });
+    } else if ( password != confirmPassword ){
+      setState(() {
+        _errorMessage = 'Passwords do not match';
+      });
+    } else {
+      final userViewModel = UserViewModel();
+
+      // Call createAccount in UserViewModel to add the new user to the database
+      bool success = await userViewModel.createAccount(username, password);
+
+      if (success) {
+        Navigator.of(context).pop(); // Close the dialog if successful
+      } else {
+        setState(() {
+          _errorMessage = 'Error creating account';
+        });
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        TextField(
+          controller: _usernameController,
+          decoration: const InputDecoration(labelText: "Username"),
+        ),
+        TextField(
+          controller: _passwordController,
+          decoration: const InputDecoration(labelText: "Password"),
+          obscureText: true,
+        ),
+        TextField(
+          controller: _confirmPasswordController,
+          decoration: const InputDecoration(labelText: "Confirm Password"),
+          obscureText: true,
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _createAccount,
+          child: const Text("Create Account"),
+        ),
+        if (_errorMessage != null) ...[
+          const SizedBox(height: 10),
+          Text(
+            _errorMessage!,
+            style: const TextStyle(color: Colors.red),
+          ),
+        ],
+      ],
+    );
+  }
 }
