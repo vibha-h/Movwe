@@ -15,6 +15,8 @@ class DatabaseService {
   // Initialize the database
   static Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'app_database.db');
+    print('Db path: $path');
+    
     return openDatabase(
       path,
       onCreate: (db, version) {

@@ -1,8 +1,25 @@
+import 'package:flutter/material.dart';
 import '../models/user_model.dart';
 import '../services/user_database_service.dart';
 
-class UserViewModel {
+class UserViewModel extends ChangeNotifier {
+  static final UserViewModel _instance = UserViewModel._internal();
   final UserDatabaseService _userDatabaseService = UserDatabaseService();
+  User? _currentUser;
+
+  factory UserViewModel() {
+    return _instance;
+  }
+
+  UserViewModel._internal();
+
+  // Getter for the current user
+  User? get currentUser => _currentUser;
+
+  // Set the current user
+  void setCurrentUser(User? user) {
+    _currentUser = user;
+  }
 
   // Create account
   Future<bool> createAccount(String username, String password) async {
@@ -15,7 +32,6 @@ class UserViewModel {
       
       return true;
     } catch (e) {
-      print('Error: $e');
       return false;
     }
   }
@@ -38,5 +54,17 @@ class UserViewModel {
   // Get all users
   Future<List<User>> getAllUsers() async {
     return await _userDatabaseService.getAllUsers();
+  }
+
+  Future<User?> authenticate(String username, String password) async {
+    try {
+      final user = await _userDatabaseService.authenticate(username, password);
+      
+      setCurrentUser(user);
+
+      return user;
+    } catch (e) {
+      throw Exception('Authentication failed: ${e.toString()}');
+    }
   }
 }

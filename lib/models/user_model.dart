@@ -33,8 +33,24 @@ class User {
       username: map['username'],
       password: map['password'],
       profilePic: map['profilePic'],
-      topGenres: (map['topGenres'] as String).split(','),
-      lobbyIds: (map['lobbies'] as String).split(',').map((id) => int.parse(id)).toList(),
+      topGenres: _parseGenres(map['topGenres']),
+      lobbyIds: _parseLobbies(map['lobbies']),
     );
+  }
+
+  static List<String> _parseGenres(String? value){
+    if (value == null || value.isEmpty){
+      return [];
+    }
+
+    return value.split(',').where((element) => element.isNotEmpty).toList();
+  }
+
+  static List<int> _parseLobbies(String? value){
+    if (value == null || value.isEmpty){
+      return [];
+    }
+
+    return value.split(',').map((id) => int.tryParse(id) ?? 0).toList();
   }
 }

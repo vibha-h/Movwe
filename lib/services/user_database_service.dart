@@ -71,12 +71,39 @@ class UserDatabaseService {
   }
 
   Future<bool> isUsernameAvailable(String username) async {
-  final db = await DatabaseService.database;
-  List<Map<String, dynamic>> maps = await db.query(
-    'users',
-    where: 'username = ?',
-    whereArgs: [username],
-  );
-  return maps.isEmpty;
-}
+    final db = await DatabaseService.database;
+    List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'username = ?',
+      whereArgs: [username],
+    );
+    return maps.isEmpty;
+  }
+
+  Future<User?> authenticate(String username, String password) async {
+    final db = await DatabaseService.database;
+
+    // Query the database to get the user by username
+    List<Map<String, dynamic>> maps = await db.query(
+      'users',
+      where: 'username = ?',
+      whereArgs: [username],
+    );
+
+    // If a user with the username exists, check the password
+    if (maps.isNotEmpty) {
+      // Get the user from the database
+      final userMap = maps.first;
+      final storedPassword = userMap['password'];
+
+      // Check if the entered password matches the stored password
+      if (storedPassword == password) {
+        return User.fromMap(userMap);  // Return the user if password matches
+      } else {
+        throw Exception('Invalid password');  // Throw an exception if passwords don't match
+      }
+    } else {
+      throw Exception('User not found');  // Throw an exception if the username doesn't exist
+    }
+  }
 }

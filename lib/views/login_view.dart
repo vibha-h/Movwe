@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import './home_view.dart';
 import '../viewmodels/user_viewmodel.dart';
 
+final userViewModel = UserViewModel();
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -14,7 +16,7 @@ class _LoginViewState extends State<LoginView> {
   final _passwordController = TextEditingController();
   String? _errorMessage;
 
-  void _login() {
+  Future<void> _login() async {
     final username = _usernameController.text;
     final password = _passwordController.text;
 
@@ -23,16 +25,19 @@ class _LoginViewState extends State<LoginView> {
         _errorMessage = 'Please enter both username and password';
       });
     } else {
-      // authenticate
-      if (username == 'user' && password == 'password') {
-        // If valid, navigate to the home view
+      try {
+        // authenticate
+        final user = await userViewModel.authenticate(username, password);
+
+        // Navigate to the home view
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomeView()),
         );
-      } else {
+      } catch (e) {
+        // If authentication fails, show the error message
         setState(() {
-          _errorMessage = 'Invalid username or password';
+          _errorMessage = 'Invalid username/password combination';
         });
       }
     }
@@ -119,7 +124,6 @@ class _SignUpFormState extends State<SignUpForm> {
         _errorMessage = 'Passwords do not match';
       });
     } else {
-      final userViewModel = UserViewModel();
 
       // Call createAccount in UserViewModel to add the new user to the database
       bool success = await userViewModel.createAccount(username, password);
