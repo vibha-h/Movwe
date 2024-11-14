@@ -2,7 +2,6 @@ import './database_service.dart';
 import '../models/lobby_model.dart';
 
 class LobbyDatabaseService {
-
   // Create a lobby
   Future<int> createLobby(Lobby lobby) async {
     final db = await DatabaseService.database;

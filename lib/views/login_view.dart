@@ -120,12 +120,11 @@ class _SignUpFormState extends State<SignUpForm> {
       setState(() {
         _errorMessage = 'Please enter both username and password';
       });
-    } else if ( password != confirmPassword ){
+    } else if (password != confirmPassword) {
       setState(() {
         _errorMessage = 'Passwords do not match';
       });
     } else {
-
       // Call createAccount in UserViewModel to add the new user to the database
       bool success = await userViewModel.createAccount(username, password);
 

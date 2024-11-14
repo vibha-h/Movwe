@@ -25,11 +25,16 @@ class UserViewModel extends ChangeNotifier {
   Future<bool> createAccount(String username, String password) async {
     try {
       // Create a new User model
-      final user = User(username: username, password: password, profilePic: 'image.png', topGenres: [], lobbyIds: []);
-      
+      final user = User(
+          username: username,
+          password: password,
+          profilePic: 'image.png',
+          topGenres: [],
+          lobbyIds: []);
+
       // Save the user to the database
       await _userDatabaseService.addUser(user);
-      
+
       return true;
     } catch (e) {
       return false;
@@ -59,7 +64,7 @@ class UserViewModel extends ChangeNotifier {
   Future<User?> authenticate(String username, String password) async {
     try {
       final user = await _userDatabaseService.authenticate(username, password);
-      
+
       setCurrentUser(user);
 
       return user;

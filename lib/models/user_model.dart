@@ -38,16 +38,16 @@ class User {
     );
   }
 
-  static List<String> _parseGenres(String? value){
-    if (value == null || value.isEmpty){
+  static List<String> _parseGenres(String? value) {
+    if (value == null || value.isEmpty) {
       return [];
     }
 
     return value.split(',').where((element) => element.isNotEmpty).toList();
   }
 
-  static List<int> _parseLobbies(String? value){
-    if (value == null || value.isEmpty){
+  static List<int> _parseLobbies(String? value) {
+    if (value == null || value.isEmpty) {
       return [];
     }
 

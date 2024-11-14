@@ -98,12 +98,14 @@ class UserDatabaseService {
 
       // Check if the entered password matches the stored password
       if (storedPassword == password) {
-        return User.fromMap(userMap);  // Return the user if password matches
+        return User.fromMap(userMap); // Return the user if password matches
       } else {
-        throw Exception('Invalid password');  // Throw an exception if passwords don't match
+        throw Exception(
+            'Invalid password'); // Throw an exception if passwords don't match
       }
     } else {
-      throw Exception('User not found');  // Throw an exception if the username doesn't exist
+      throw Exception(
+          'User not found'); // Throw an exception if the username doesn't exist
     }
   }
 }

@@ -12,7 +12,7 @@ class LobbyViewModel extends ChangeNotifier {
   User? currentUser;
 
   // Create a new lobby
-  Future<bool> createLobby(BuildContext context) async{
+  Future<bool> createLobby(BuildContext context) async {
     final userViewModel = Provider.of<UserViewModel>(context, listen: false);
 
     currentUser = userViewModel.currentUser;
@@ -20,20 +20,22 @@ class LobbyViewModel extends ChangeNotifier {
     try {
       Lobby lobby;
 
-      if (currentUser != null){
+      if (currentUser != null) {
         int? userId = currentUser?.id;
         // Create a new Lobby model
-        if (userId != null){
-          lobby = Lobby(qrCode: "qrcode.png", adminId: userId, memberIds: [userId]);
+        if (userId != null) {
+          lobby =
+              Lobby(qrCode: "qrcode.png", adminId: userId, memberIds: [userId]);
         } else {
           return false;
         }
-        
+
         // Save the lobby to the database
         int lobbyId = await _lobbyDatabaseService.createLobby(lobby);
 
         // Add the lobbyId to the user's lobbyIds
-        final updatedLobbyIds = List<int>.from(currentUser!.lobbyIds)..add(lobbyId);
+        final updatedLobbyIds = List<int>.from(currentUser!.lobbyIds)
+          ..add(lobbyId);
         currentUser!.lobbyIds = updatedLobbyIds;
 
         // Update the user in the database
@@ -49,7 +51,7 @@ class LobbyViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> joinLobby(BuildContext context, int? lobbyId) async{
+  Future<bool> joinLobby(BuildContext context, int? lobbyId) async {
     final userViewModel = Provider.of<UserViewModel>(context, listen: false);
 
     try {
@@ -60,7 +62,7 @@ class LobbyViewModel extends ChangeNotifier {
         throw Exception("No user found");
       }
 
-      if (lobbyId == null){
+      if (lobbyId == null) {
         throw Exception("Invalid lobby ID");
       }
 
@@ -70,19 +72,21 @@ class LobbyViewModel extends ChangeNotifier {
       if (lobby == null) {
         return false;
       }
-      
+
       // Check to see if user is already in lobby
       if (lobby.memberIds.contains(currentUser.id)) return false;
 
       // Add the user to the lobby's memberIds
-      final updatedMemberIds = List<int>.from(lobby.memberIds)..add(currentUser.id!);
+      final updatedMemberIds = List<int>.from(lobby.memberIds)
+        ..add(currentUser.id!);
       lobby.memberIds = updatedMemberIds;
 
       // Update the lobby in the database
       await _lobbyDatabaseService.updateLobby(lobby);
 
       // Add the lobbyId to the user's lobbyIds
-      final updatedLobbyIds = List<int>.from(currentUser.lobbyIds)..add(lobbyId);
+      final updatedLobbyIds = List<int>.from(currentUser.lobbyIds)
+        ..add(lobbyId);
       currentUser.lobbyIds = updatedLobbyIds;
 
       // Update the user in the database

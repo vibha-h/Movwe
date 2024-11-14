@@ -23,7 +23,7 @@ class Lobby {
       'id': lobbyId,
       'qrCode': qrCode,
       'adminId': adminId,
-      'memberIds': memberIds.join(','),  // Store list as comma-separated string
+      'memberIds': memberIds.join(','), // Store list as comma-separated string
       'movieIds': movieIds.join(','),
       'userRankings': _encodeUserRankings(userRankings),
       'status': status,
@@ -66,7 +66,8 @@ class Lobby {
     return Map.fromEntries(value.split(';').map((entry) {
       var parts = entry.split(':');
       var userId = int.tryParse(parts[0]) ?? 0;
-      var movieIds = parts[1].split(',').map((id) => int.tryParse(id) ?? 0).toList();
+      var movieIds =
+          parts[1].split(',').map((id) => int.tryParse(id) ?? 0).toList();
       return MapEntry(userId, movieIds);
     }));
   }
