@@ -24,9 +24,6 @@ class LobbyDatabaseService {
   }
 
   Future<int> updateLobby(Lobby lobby) async {
-    Map<String, dynamic> lob = lobby.toMap();
-    print("lobby: $lob");
-
     final db = await DatabaseService.database;
     return await db.update(
       'lobbies',
