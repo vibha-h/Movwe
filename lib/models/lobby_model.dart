@@ -1,5 +1,5 @@
 class Lobby {
-  String? lobbyId;
+  int? lobbyId;
   String qrCode;
   int adminId;
   List<int> memberIds;
@@ -33,7 +33,7 @@ class Lobby {
   // Convert a map to a Lobby object
   factory Lobby.fromMap(Map<String, dynamic> map) {
     return Lobby(
-      lobbyId: map['lobbyId'],
+      lobbyId: map['id'],
       qrCode: map['qrCode'],
       adminId: map['adminId'],
       memberIds: _parseIds(map['memberIds']),

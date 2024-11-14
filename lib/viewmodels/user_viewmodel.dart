@@ -67,4 +67,8 @@ class UserViewModel extends ChangeNotifier {
       throw Exception('Authentication failed: ${e.toString()}');
     }
   }
+
+  Future<void> logout() async {
+    _currentUser = null;
+  }
 }

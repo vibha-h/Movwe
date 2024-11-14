@@ -4,7 +4,7 @@ class User {
   String password;
   String profilePic;
   List<String> topGenres;
-  List<int> lobbyIds; // List of lobby IDs (foreign keys)
+  List<int> lobbyIds;
 
   User({
     this.id,
