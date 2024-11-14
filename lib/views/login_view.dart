@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './home_view.dart';
 import '../viewmodels/user_viewmodel.dart';
-
-final userViewModel = UserViewModel();
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -17,6 +16,7 @@ class _LoginViewState extends State<LoginView> {
   String? _errorMessage;
 
   Future<void> _login() async {
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
     final username = _usernameController.text;
     final password = _passwordController.text;
 
@@ -27,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
     } else {
       try {
         // authenticate
-        final user = await userViewModel.authenticate(username, password);
+        await userViewModel.authenticate(username, password);
 
         // Navigate to the home view
         Navigator.pushReplacement(
@@ -76,7 +76,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _login,
+              onPressed: () => _login(),
               child: const Text("Login"),
             ),
             if (_errorMessage != null) ...[
@@ -111,6 +111,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String? _errorMessage;
 
   void _createAccount() async {
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
     final username = _usernameController.text;
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;

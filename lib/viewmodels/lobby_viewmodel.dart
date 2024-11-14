@@ -1,17 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:movwe/models/user_model.dart';
+import 'package:movwe/services/lobby_database_service.dart';
+import 'package:movwe/viewmodels/user_viewmodel.dart';
+import 'package:provider/provider.dart';
 import '../models/lobby_model.dart';
-import '../models/movie_model.dart';
 
-class LobbyViewModel {
+class LobbyViewModel extends ChangeNotifier {
+  final LobbyDatabaseService _lobbyDatabaseService = LobbyDatabaseService();
   Lobby? _currentLobby;
-
   Lobby? get currentLobby => _currentLobby;
+  User? currentUser;
 
   // Create a new lobby
-  void createLobby(String lobbyId, String joinCode) {
-    // _currentLobby = Lobby(
-    //   lobbyId: lobbyId,
-    //   joinCode: joinCode,
-    // );
+  Future<bool> createLobby(BuildContext context) async{
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+
+    currentUser = userViewModel.currentUser;
+
+    try {
+      Lobby lobby;
+      int? userId = currentUser?.id;
+      // Create a new Lobby model
+      if (userId != null){
+        lobby = Lobby(qrCode: "qrcode.png", adminId: userId, memberIds: [userId]);
+      } else {
+        return false;
+      }
+      
+      // Save the user to the database
+      await _lobbyDatabaseService.createLobby(lobby);
+
+      return true;
+    } catch (e) {
+      print("Error creating lobby: ${e.toString()}");
+      return false;
+    }
   }
 
   // // Add a movie to the lobby

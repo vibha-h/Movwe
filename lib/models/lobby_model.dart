@@ -1,19 +1,14 @@
-import './user_model.dart';
-import './movie_model.dart';
-
 class Lobby {
-  String lobbyId;
-  String joinCode;
+  String? lobbyId;
   String qrCode;
   int adminId;
   List<int> memberIds;
   List<int> movieIds;
-  Map<User, List<Movie>> userRankings;
+  Map<int, List<int>> userRankings; // Map userId to list of movieIds ranked
   String status;
 
   Lobby({
-    required this.lobbyId,
-    required this.joinCode,
+    this.lobbyId,
     required this.qrCode,
     required this.adminId,
     this.memberIds = const [],
@@ -22,62 +17,57 @@ class Lobby {
     this.status = 'OPEN',
   });
 
-  // //TODO
-  // void addMovie(Movie movie){
-  //   movieList.add(movie);
-  // }
+  // Convert the Lobby object to a map for the database
+  Map<String, dynamic> toMap() {
+    return {
+      'id': lobbyId,
+      'qrCode': qrCode,
+      'adminId': adminId,
+      'memberIds': memberIds.join(','),  // Store list as comma-separated string
+      'movieIds': movieIds.join(','),
+      'userRankings': _encodeUserRankings(userRankings),
+      'status': status,
+    };
+  }
 
-  // //TODO
-  // void removeMovie(Movie movie){
-  //   movieList.remove(movie);
-  // }
+  // Convert a map to a Lobby object
+  factory Lobby.fromMap(Map<String, dynamic> map) {
+    return Lobby(
+      lobbyId: map['lobbyId'],
+      qrCode: map['qrCode'],
+      adminId: map['adminId'],
+      memberIds: _parseIds(map['memberIds']),
+      movieIds: _parseIds(map['movieIds']),
+      userRankings: _decodeUserRankings(map['userRankings']),
+      status: map['status'],
+    );
+  }
 
-  // //TODO
-  // void addMember(User user){
-  //   memberList.add(user);
-  //   user.joinLobby(this);
-  // }
+  // Helper to parse a comma-separated string into a list of integers
+  static List<int> _parseIds(String? value) {
+    if (value == null || value.isEmpty) {
+      return [];
+    }
+    return value.split(',').map((id) => int.tryParse(id) ?? 0).toList();
+  }
 
-  // //TODO
-  // void removeMember(User user){
-  //   memberList.remove(user);
-  //   user.leaveLobby(this);
-  // }
+  // Helper to encode user rankings for database storage
+  static String _encodeUserRankings(Map<int, List<int>> rankings) {
+    return rankings.entries
+        .map((entry) => '${entry.key}:${entry.value.join(',')}')
+        .join(';');
+  }
 
-  // //TODO
-  // void updateStatus(String status){
-  //   this.status = status;
-  // }
-
-  // //TODO
-  // void finalize(){
-  //   updateStatus("READY");
-  // }
-
-  // //TODO
-  // void deleteLobby(){
-  //   return;
-  // }
-
-  // //TODO
-  // List<Movie> calculateAverageRankings(){
-  //   return movieList;
-  // }
-
-  // //TODO
-  // void addUserRanking(User user, List<Movie> ranking){
-  //   userRankings[user] = ranking;
-  // }
-
-  // //TODO
-  // void reset(){
-  //   movieList = const [];
-  //   userRankings = const {};
-  //   updateStatus("OPEN");
-  // }
-
-  // //TODO
-  // Movie selectRandomMovie(){
-  //   return movieList[0];
-  // }
+  // Helper to decode user rankings from stored string
+  static Map<int, List<int>> _decodeUserRankings(String? value) {
+    if (value == null || value.isEmpty) {
+      return {};
+    }
+    return Map.fromEntries(value.split(';').map((entry) {
+      var parts = entry.split(':');
+      var userId = int.tryParse(parts[0]) ?? 0;
+      var movieIds = parts[1].split(',').map((id) => int.tryParse(id) ?? 0).toList();
+      return MapEntry(userId, movieIds);
+    }));
+  }
 }

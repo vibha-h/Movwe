@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movwe/viewmodels/lobby_viewmodel.dart';
+import 'package:provider/provider.dart';
 import '../viewmodels/user_viewmodel.dart';
-
-final userViewModel = UserViewModel();
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -18,27 +18,42 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _loadCurrentUser();
   }
 
-  // Method to load current user
-  Future<void> _loadCurrentUser() async {
+  @override
+  Widget build(BuildContext context) {
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    final lobbyViewModel = Provider.of<LobbyViewModel>(context, listen:false);
+    
     final user = userViewModel.currentUser;
     if (user != null) {
       setState(() {
         username = user.username;
       });
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Home")),
       body: Center(
         child: username == null
-            ? const CircularProgressIndicator() // Show a loading indicator if the username is not yet set
-            : Text('Welcome to the Home Page, $username'),
+            ? const CircularProgressIndicator()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Welcome to the Home Page, $username'),
+                  const SizedBox(height: 20), // Adds space between the text and button
+                  ElevatedButton(
+                    onPressed: () async {
+                      bool isCreated = await lobbyViewModel.createLobby(context);
+                      String message = isCreated? "Lobby Created!" : "Error creating lobby.";
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(message)),
+                      );
+                    },
+                    child: const Text("Create Lobby"),
+                  ),
+                ],
+              ),
       ),
     );
   }

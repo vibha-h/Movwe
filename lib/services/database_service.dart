@@ -16,7 +16,7 @@ class DatabaseService {
   static Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'app_database.db');
     print('Db path: $path');
-    
+
     return openDatabase(
       path,
       onCreate: (db, version) {
@@ -28,7 +28,7 @@ class DatabaseService {
           'CREATE TABLE movies(id INTEGER PRIMARY KEY AUTOINCREMENT, moviePoster TEXT, title TEXT, description TEXT, genre TEXT, contentRating TEXT, IMDbRating TEXT, reviews TEXT, numberOfSelections INTEGER)',
         );
         db.execute(
-          'CREATE TABLE lobbies(id INTEGER PRIMARY KEY AUTOINCREMENT, joinCode TEXT UNIQUE, qrCode TEXT UNIQUE, adminId INTEGER, memberIds TEXT, movieIds TEXT, status TEXT)',
+          'CREATE TABLE lobbies(id INTEGER PRIMARY KEY AUTOINCREMENT, qrCode TEXT, adminId INTEGER, memberIds TEXT, movieIds TEXT, userRankings TEXT, status TEXT)',
         );
       },
       version: 1,
