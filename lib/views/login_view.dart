@@ -4,7 +4,7 @@ import './home_view.dart';
 import '../viewmodels/user_viewmodel.dart';
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   _LoginViewState createState() => _LoginViewState();
@@ -48,8 +48,8 @@ class _LoginViewState extends State<LoginView> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Create Account'),
+        return const AlertDialog(
+          title: Text('Create Account'),
           content: SignUpForm(),
         );
       },
@@ -100,6 +100,8 @@ class _LoginViewState extends State<LoginView> {
 
 // SignUpForm Widget that will be used in the Dialog
 class SignUpForm extends StatefulWidget {
+  const SignUpForm({super.key});
+
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
