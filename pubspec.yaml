@@ -71,6 +71,10 @@ flutter:
     - assets/images/prideAndPrej.jpg
     - assets/images/scoobydoo.jpg
     - assets/images/spiderman.jpg
+    - assets/images/hugo.jpg
+    - assets/images/batman.jpg
+    - assets/images/gladiator.jpg
+    - assets/images/dune.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
