@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movwe/viewmodels/lobby_viewmodel.dart';
+import 'package:movwe/views/join_lobby_view.dart';
 import 'package:movwe/views/login_view.dart';
 import 'package:provider/provider.dart';
 import '../models/movie_model.dart';
@@ -47,6 +48,50 @@ class _HomeViewState extends State<HomeView> {
       genre: 'Animated',
       contentRating: 'PG',
       IMDbRating: '9.3',
+      reviews: [],
+      numberOfSelections: 0,
+    ),
+    Movie(
+      movieId: '4',
+      moviePoster: 'assets/images/gladiator.jpg',
+      title: 'Gladiator',
+      description: 'Description of Movie 4',
+      genre: 'Drama',
+      contentRating: 'R',
+      IMDbRating: '7.3',
+      reviews: [],
+      numberOfSelections: 0,
+    ),
+    Movie(
+      movieId: '5',
+      moviePoster: 'assets/images/batman.jpg',
+      title: 'Dark Knight Rises',
+      description: 'Description of Movie 5',
+      genre: 'Action',
+      contentRating: 'PG-13',
+      IMDbRating: '8.5',
+      reviews: [],
+      numberOfSelections: 0,
+    ),
+    Movie(
+      movieId: '6',
+      moviePoster: 'assets/images/dune.jpg',
+      title: 'Dune',
+      description: 'Description of Movie 6',
+      genre: 'Sci-Fi',
+      contentRating: 'PG',
+      IMDbRating: '9.3',
+      reviews: [],
+      numberOfSelections: 0,
+    ),
+    Movie(
+      movieId: '7',
+      moviePoster: 'assets/images/hugo.jpg',
+      title: 'Hugo',
+      description: 'Description of Movie 7',
+      genre: 'Adventure',
+      contentRating: 'PG',
+      IMDbRating: '7.4',
       reviews: [],
       numberOfSelections: 0,
     ),
@@ -126,13 +171,69 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    final lobbyViewModel = Provider.of<LobbyViewModel>(context, listen: false);
+
+    final user = userViewModel.currentUser;
+    if (user != null) {
+      setState(() {
+        username = user.username;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home View'),
+        title: Text('Welcome ${username ?? ''}!'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              // Implement search functionality here
+            },
+          ),
+          // IconButton(
+          //   icon: const Icon(Icons.group_add),
+          //   onPressed: () async {
+          //     // Implement create/join lobby functionality here
+          //     bool isCreated = await lobbyViewModel.createLobby(context);
+          //     String message =
+          //         isCreated ? "Lobby Created!" : "Error creating lobby.";
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       SnackBar(content: Text(message)),
+          //     );
+          //   },
+          // ),
+          TextButton.icon(
+              onPressed: () {
+                // Implement lobby join/create functionality here
+                //redirect to lobby view
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LobbyView()),
+                );
+              },
+              label: const Text('Create/Join Lobby'),
+              icon: const Icon(Icons.group_add)),
+          TextButton.icon(
+              onPressed: () {
+                // Implement user profile functionality here
+              },
+              label: const Text('Profile'),
+              icon: const Icon(Icons.person)),
+          // IconButton(
+          //   icon: const Icon(Icons.logout_sharp),
+          //   onPressed: _logout,
+          // ),
+          TextButton.icon(
+              onPressed: _logout,
+              label: const Text('Logout'),
+              icon: const Icon(Icons.logout_sharp)),
+        ],
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns in the grid
+          crossAxisCount: 4, // Number of movies across
           crossAxisSpacing: 10.0, // Spacing between columns
           mainAxisSpacing: 10.0, // Spacing between rows
         ),
@@ -148,15 +249,6 @@ class _HomeViewState extends State<HomeView> {
                     child: Image.asset(
                       movie.moviePoster,
                       fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      movie.title,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
