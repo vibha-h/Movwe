@@ -103,55 +103,56 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _showMovieDetails(Movie movie) {
-    showModalBottomSheet(
+    showDialog(
       context: context,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                movie.title,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              Image.asset(movie.moviePoster,
-                  height: 200, width: 150, fit: BoxFit.cover),
-              const SizedBox(height: 10),
-              Text(
-                movie.description,
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Genre: ${movie.genre}',
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Content Rating: ${movie.contentRating}',
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'IMDb Rating: ${movie.IMDbRating}',
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Reviews: ${movie.reviews.join(', ')}',
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Number of Selections: ${movie.numberOfSelections}',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
+        return AlertDialog(
+          title: Text(
+            movie.title,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  movie.moviePoster,
+                  height: 200,
+                  width: 150,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  movie.description,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Genre: ${movie.genre}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Content Rating: ${movie.contentRating}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'IMDb Rating: ${movie.IMDbRating}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Close'),
+            ),
+          ],
         );
       },
     );
