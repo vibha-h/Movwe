@@ -15,7 +15,7 @@ class _LobbyViewState extends State<LobbyView> {
 
   @override
   Widget build(BuildContext context) {
-    final lobbyViewModel = Provider.of<LobbyViewModel>(context, listen: false);
+    final lobbyViewModel = Provider.of<LobbyViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,14 +68,16 @@ class _LobbyViewState extends State<LobbyView> {
             ElevatedButton(
               onPressed: () async {
                 bool success = await lobbyViewModel.createLobby(context);
-                String message =
-                    success ? "Created Lobby!" : "Failed to create lobby.";
+                String message = success
+                    ? "Created Lobby: ${lobbyViewModel.joinCode}"
+                    : "Failed to create lobby.";
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(message)),
                 );
               },
               child: const Text('Create New Lobby'),
             ),
+            const SizedBox(height: 20),
           ],
         ),
       ),

@@ -10,6 +10,8 @@ class LobbyViewModel extends ChangeNotifier {
   Lobby? _currentLobby;
   Lobby? get currentLobby => _currentLobby;
   User? currentUser;
+  int? _joinCode;
+  int? get joinCode => _joinCode;
 
   // Create a new lobby
   Future<bool> createLobby(BuildContext context) async {
@@ -32,6 +34,9 @@ class LobbyViewModel extends ChangeNotifier {
 
         // Save the lobby to the database
         int lobbyId = await _lobbyDatabaseService.createLobby(lobby);
+        //print the lobby id
+        print("Lobby ID: $lobbyId");
+        _joinCode = lobbyId;
 
         // Add the lobbyId to the user's lobbyIds
         final updatedLobbyIds = List<int>.from(currentUser!.lobbyIds)
