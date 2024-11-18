@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movwe/viewmodels/lobby_viewmodel.dart';
 import 'package:movwe/views/join_lobby_view.dart';
 import 'package:movwe/views/login_view.dart';
+import 'package:movwe/views/search_view.dart';
 import 'package:provider/provider.dart';
 import 'package:movwe/views/ranking_view.dart';
 import '../models/movie_model.dart';
