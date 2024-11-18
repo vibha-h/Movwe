@@ -3,6 +3,7 @@ import 'package:movwe/viewmodels/lobby_viewmodel.dart';
 import 'package:movwe/views/join_lobby_view.dart';
 import 'package:movwe/views/login_view.dart';
 import 'package:provider/provider.dart';
+import 'package:movwe/views/ranking_view.dart';
 import '../models/movie_model.dart';
 import '../viewmodels/user_viewmodel.dart';
 
@@ -226,11 +227,47 @@ class _HomeViewState extends State<HomeView> {
           //   onPressed: _logout,
           // ),
           TextButton.icon(
+              onPressed: () {
+                // Navigate to the RankingView
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RankingView()),
+                );
+              },
+              label: const Text('Go to Ranking'),
+              icon: const Icon(Icons.star),
+            ),
+
+          TextButton.icon(
               onPressed: _logout,
               label: const Text('Logout'),
               icon: const Icon(Icons.logout_sharp)),
+               IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Placeholder for adding movie functionality
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Add Movie'),
+                    content: const Text('Functionality will be implemented later.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ],
       ),
+
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4, // Number of movies across
