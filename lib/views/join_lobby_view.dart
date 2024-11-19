@@ -28,7 +28,7 @@ class _LobbyViewState extends State<LobbyView> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomeView()),
-              ); // Removed 'const' here
+              );
             },
           ),
         ],
@@ -57,7 +57,7 @@ class _LobbyViewState extends State<LobbyView> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => CurrentLobbyView(),
-                      ), // Removed 'const' here
+                      ),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

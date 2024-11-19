@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/lobby_viewmodel.dart';
+import '../models/movie_model.dart';
+import '../viewmodels/movie_viewmodel.dart';
 import './ranking_view.dart';
 
-class CurrentLobbyView extends StatelessWidget {
+class CurrentLobbyView extends StatefulWidget {
   const CurrentLobbyView({super.key});
+
+  @override
+  State<CurrentLobbyView> createState() => _CurrentLobbyViewState();
+}
+
+class _CurrentLobbyViewState extends State<CurrentLobbyView> {
+  final _movieViewModel = MovieViewModel();
+  final TextEditingController _searchController = TextEditingController();
+
+  List<Movie> _searchResults = [];
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     final lobbyViewModel = Provider.of<LobbyViewModel>(context);
-    final TextEditingController movieController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -27,27 +39,70 @@ class CurrentLobbyView extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: movieController,
-                    decoration: const InputDecoration(
-                      labelText: "Add a Movie",
-                      border: OutlineInputBorder(),
-                    ),
+                TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    labelText: "Search and Add a Movie",
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.search),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    final movie = movieController.text;
-                    if (movie.isNotEmpty) {
-                      lobbyViewModel.addMovie(movie);
-                      movieController.clear();
+                  onChanged: (query) async {
+                    if (query.isEmpty) {
+                      setState(() {
+                        _searchResults = [];
+                      });
+                      return;
                     }
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    final results = await _movieViewModel.search(query);
+                    setState(() {
+                      _searchResults = results;
+                      _isLoading = false;
+                    });
                   },
                 ),
+                if (_isLoading)
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                if (_searchResults.isNotEmpty)
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _searchResults.length,
+                    itemBuilder: (context, index) {
+                      final movie = _searchResults[index];
+                      return ListTile(
+                        title: Text(movie.title),
+                        subtitle: Text(movie.description),
+                        onTap: () {
+                          if (!lobbyViewModel.movies.contains(movie.title)) {
+                            lobbyViewModel.addMovie(movie.title);
+                            // ScaffoldMessenger.of(context).showSnackBar(
+                            //   SnackBar(
+                            //     content: Text("${movie.title} added!"),
+                            //   ),
+                            // );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "${movie.title} is already in the list."),
+                              ),
+                            );
+                          }
+                          _searchController.clear();
+                          setState(() {
+                            _searchResults = [];
+                          });
+                        },
+                      );
+                    },
+                  ),
               ],
             ),
           ),
