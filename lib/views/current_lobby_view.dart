@@ -77,8 +77,14 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
                     itemBuilder: (context, index) {
                       final movie = _searchResults[index];
                       return ListTile(
+                        leading: Image.asset(
+                          movie.moviePoster,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
                         title: Text(movie.title),
-                        subtitle: Text(movie.description),
+                        //subtitle: Text(movie.description),
                         onTap: () {
                           if (!lobbyViewModel.movies.contains(movie.title)) {
                             lobbyViewModel.addMovie(movie.title);
