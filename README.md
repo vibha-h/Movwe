@@ -91,7 +91,9 @@ Movwe is a movie app used to help groups of friends decide which movie to watch.
 
     1. Create or join a lobby (see "Create lobby" or "Join Lobby")
     2. Ensure at least one movie has been added to the lobby (see "Add Movie to Lobby")
-    3. TBD
-    4. TBD
-    5. TBD
+    3. At home screen, press the "Lobby" button
+    4. At the lobby screen, press the dropdown and select which lobby you would like to view
+    5. Press the "Rank Movies" button
+    6. Use the sliders on the right to order the movies by preference (Top is favorite)
+    7. Press the green check mark to submit rankings
 
