@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:movwe/views/ranking_view.dart';
 import '../models/movie_model.dart';
 import '../viewmodels/user_viewmodel.dart';
+import 'movie_details_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -196,7 +197,10 @@ class _HomeViewState extends State<HomeView> {
         itemBuilder: (context, index) {
           final movie = movies[index];
           return GestureDetector(
-            onTap: () => _showMovieDetails(movie),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => MovieDetailsView(movie: movie),
+            ),
             child: Card(
               child: Column(
                 children: [

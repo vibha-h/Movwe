@@ -4,6 +4,7 @@ import 'package:movwe/services/lobby_database_service.dart';
 import 'package:movwe/viewmodels/user_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../models/lobby_model.dart';
+import '../models/movie_model.dart';
 
 class LobbyViewModel extends ChangeNotifier {
   final LobbyDatabaseService _lobbyDatabaseService = LobbyDatabaseService();
@@ -12,6 +13,11 @@ class LobbyViewModel extends ChangeNotifier {
   User? currentUser;
   int? _joinCode;
   int? get joinCode => _joinCode;
+
+  // Get a lobby by ID
+  Future<Lobby?> getLobby(int id) async {
+    return await _lobbyDatabaseService.getLobbyById(id);
+  }
 
   // Create a new lobby
   Future<bool> createLobby(BuildContext context) async {
@@ -101,6 +107,17 @@ class LobbyViewModel extends ChangeNotifier {
     } catch (e) {
       print("Error joining lobby: $e");
       return false;
+    }
+  }
+
+  Future<void> updateLobby(Lobby lobby) async {
+    await _lobbyDatabaseService.updateLobby(lobby);
+  }
+
+  Future<void> addMovie(Lobby lobby, Movie movie) async {
+    if (!lobby.movieIds.contains(movie.movieId)) {
+      lobby.movieIds.add(movie.movieId!);
+      await updateLobby(lobby);
     }
   }
 }
