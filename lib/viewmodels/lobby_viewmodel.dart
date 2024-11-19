@@ -103,29 +103,4 @@ class LobbyViewModel extends ChangeNotifier {
       return false;
     }
   }
-
-  // // Add a movie to the lobby
-  // void addMovie(Movie movie) {
-  //   _currentLobby?.addMovie(movie);
-  // }
-
-  // // Remove a movie from the lobby
-  // void removeMovie(Movie movie){
-  //   _currentLobby?.removeMovie(movie);
-  // }
-
-  // // Update lobby status
-  // void updateLobbyStatus(String status) {
-  //   _currentLobby?.updateStatus(status);
-  // }
-
-  // // Finalize lobby setup
-  // void finalizeLobby() {
-  //   _currentLobby?.finalize();
-  // }
-
-  // // Calculate average rankings
-  // List<Movie> calculateRankings() {
-  //   return _currentLobby?.calculateAverageRankings() ?? [];
-  // }
 }
