@@ -1,34 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/lobby_model.dart';
+import '../models/movie_model.dart';
+import '../models/user_model.dart';
 import '../viewmodels/lobby_viewmodel.dart';
+import '../viewmodels/movie_viewmodel.dart';
+import '../viewmodels/user_viewmodel.dart';
 
 class RankingView extends StatefulWidget {
-  const RankingView({super.key});
+  final Lobby selectedLobby;
+
+  const RankingView({super.key, required this.selectedLobby});
 
   @override
   _RankingViewState createState() => _RankingViewState();
 }
 
 class _RankingViewState extends State<RankingView> {
-  List<String> userRanking = [];
-  late String userId; // Unique user identifier
+  late List<int> userRanking;
+  Map<int, Movie?> movieMap = {};
+  User? currentUser;
 
   @override
   void initState() {
     super.initState();
-    // Generate a unique user ID (could also come from user input)
-    userId = 'user_${DateTime.now().millisecondsSinceEpoch}';
+    // Initialize userRanking with the movieIds in the current lobby
+    userRanking = List.from(widget.selectedLobby.movieIds);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Initialize currentUser in didChangeDependencies to ensure the widget is attached to the context
+    if (currentUser == null) {
+      _getCurrentUser(context);
+    }
+  }
+
+  Future<void> _getCurrentUser(BuildContext context) async {
+    final userViewModel = Provider.of<UserViewModel>(context);
+
+    User user = userViewModel.currentUser!;
+
+    if (mounted) {
+      setState(() {
+        currentUser = user;
+      });
+    }
+  }
+
+  Future<void> _preloadMovies() async {
+    final movieViewModel = MovieViewModel();
+
+    final Map<int, Movie?> fetchedMovies = {};
+    for (int movieId in userRanking) {
+      final movie = await movieViewModel.getMovie(movieId);
+      fetchedMovies[movieId] = movie;
+    }
+    if (mounted) {
+      setState(() {
+        movieMap = fetchedMovies;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final lobbyViewModel = Provider.of<LobbyViewModel>(context);
-    final List<String> movies = lobbyViewModel.movies;
-
-    //accept default ranking if user does not change it
-    if (userRanking.isEmpty) {
-      userRanking = List.from(movies);
-    }
+    _preloadMovies();
 
     return Scaffold(
       appBar: AppBar(
@@ -37,72 +75,102 @@ class _RankingViewState extends State<RankingView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).maybePop();
+            Navigator.of(context).pop();
           },
         ),
       ),
       body: ReorderableListView(
         onReorder: (oldIndex, newIndex) {
           if (newIndex > oldIndex) newIndex -= 1;
-          final movie = movies.removeAt(oldIndex);
-          movies.insert(newIndex, movie);
-          setState(() {
-            userRanking = List.from(movies);
-          });
+          final movieId = userRanking.removeAt(oldIndex);
+          userRanking.insert(newIndex, movieId);
         },
         children: [
-          for (int index = 0; index < movies.length; index++)
+          for (int movieId in userRanking)
             ListTile(
-              key: ValueKey(index),
-              title: Text(movies[index]),
+              key: ValueKey(movieId),
+              title: Text(
+                movieMap[movieId]?.title ?? "Movie $movieId",
+              ),
             ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.check),
-        onPressed: () {
-          // Store user ranking with dynamic user ID
-          lobbyViewModel.storeUserRanking(userId, userRanking);
-
-          // Process rankings
-          final sortedMovies = lobbyViewModel.processRankings();
-
-          // Display the final ranking with average scores
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('Final Ranking'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: sortedMovies.map((movie) {
-                    // Fetch average score for the movie
-                    final joinCode = lobbyViewModel.joinCode;
-                    final userRankings = lobbyViewModel.userRankings[joinCode];
-                    final scores = userRankings?.values
-                        .map((ranking) => ranking.indexOf(movie) + 1)
-                        .where((score) => score > 0)
-                        .toList();
-                    final average = scores != null && scores.isNotEmpty
-                        ? scores.reduce((a, b) => a + b) / scores.length
-                        : 0.0;
-
-                    return Text('${average.toStringAsFixed(2)} $movie');
-                  }).toList(),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('Close'),
-                  ),
-                ],
-              );
-            },
-          );
+        onPressed: () async {
+          // Store the updated ranking for the current user
+          final userId = currentUser!.id;
+          storeUserRankings(
+              widget.selectedLobby.lobbyId!, userId!, userRanking);
         },
       ),
     );
+  }
+
+  void storeUserRankings(int lobbyId, int userId, List<int> ranking) async {
+    final lobbyViewModel = Provider.of<LobbyViewModel>(context, listen: false);
+
+    await lobbyViewModel.storeUserRanking(lobbyId, userId, ranking);
+
+    showFinalRankings(context, lobbyId);
+  }
+
+  void showFinalRankings(BuildContext context, int lobbyId) async {
+    try {
+      final lobbyViewModel =
+          Provider.of<LobbyViewModel>(context, listen: false);
+
+      final sortedMovies = await lobbyViewModel.processRankings(lobbyId);
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Final Ranking'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: sortedMovies.map((entry) {
+                final movieId = entry.key;
+                final average = entry.value;
+
+                // Retrieve the movie title using the movieMap
+                final movieTitle = movieMap[movieId]?.title ?? 'Unknown Movie';
+
+                return Text(
+                  '$movieTitle: ${average.toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 16),
+                );
+              }).toList(),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

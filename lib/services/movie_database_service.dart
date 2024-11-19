@@ -29,4 +29,18 @@ class MovieDatabaseService {
     // Convert the list of maps to a list of Movie objects
     return maps.map((map) => Movie.fromMap(map)).toList();
   }
+
+  // Get a movie by ID
+  Future<Movie?> getMovieById(int id) async {
+    final db = await DatabaseService.database;
+    List<Map<String, dynamic>> maps = await db.query(
+      'movies',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return Movie.fromMap(maps.first);
+    }
+    return null;
+  }
 }

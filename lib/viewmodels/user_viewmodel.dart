@@ -76,4 +76,8 @@ class UserViewModel extends ChangeNotifier {
   Future<void> logout() async {
     _currentUser = null;
   }
+
+  Future<List<int>> getLobbyIdsForCurrentUser() async {
+    return currentUser!.lobbyIds;
+  }
 }

@@ -1,94 +1,151 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:movwe/models/user_model.dart';
+import 'package:movwe/services/lobby_database_service.dart';
+import 'package:movwe/viewmodels/user_viewmodel.dart';
+import 'package:provider/provider.dart';
+import '../models/lobby_model.dart';
+import '../models/movie_model.dart';
 
-class LobbyViewModel with ChangeNotifier {
-  final Map<int, List<String>> _lobbies = {}; // Maps join codes to movie lists
-  final Map<int, Map<String, List<String>>> _userRankings =
-      {}; // Maps join codes to user rankings
-  int? joinCode;
+class LobbyViewModel extends ChangeNotifier {
+  final LobbyDatabaseService _lobbyDatabaseService = LobbyDatabaseService();
+  Lobby? _currentLobby;
+  Lobby? get currentLobby => _currentLobby;
+  User? currentUser;
+  int? _joinCode;
+  int? get joinCode => _joinCode;
 
-  // Getter for user rankings
-  Map<int, Map<String, List<String>>> get userRankings => _userRankings;
+  // Get a lobby by ID
+  Future<Lobby?> getLobby(int id) async {
+    return await _lobbyDatabaseService.getLobbyById(id);
+  }
 
+  // Create a new lobby
   Future<bool> createLobby(BuildContext context) async {
-    final random = Random();
-    joinCode = random.nextInt(9000) + 1000; // Generate 4-digit number
-    print('Join Code: $joinCode');
-    if (_lobbies.containsKey(joinCode)) {
-      return false; // Retry if duplicate
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    currentUser = userViewModel.currentUser;
+    try {
+      Lobby lobby;
+      if (currentUser != null) {
+        int? userId = currentUser?.id;
+        // Create a new Lobby model
+        if (userId != null) {
+          lobby =
+              Lobby(qrCode: "qrcode.png", adminId: userId, memberIds: [userId]);
+        } else {
+          return false;
+        }
+        // Save the lobby to the database
+        int lobbyId = await _lobbyDatabaseService.createLobby(lobby);
+        //print the lobby id
+        print("Lobby ID: $lobbyId");
+        _joinCode = lobbyId;
+        // Add the lobbyId to the user's lobbyIds
+        final updatedLobbyIds = List<int>.from(currentUser!.lobbyIds)
+          ..add(lobbyId);
+        currentUser!.lobbyIds = updatedLobbyIds;
+        // Update the user in the database
+        await userViewModel.updateUser(currentUser!);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("Error creating lobby: ${e.toString()}");
+      return false;
     }
-    _lobbies[joinCode!] = [];
-    _userRankings[joinCode!] = {};
-    notifyListeners();
-    return true;
   }
 
-  Future<bool> joinLobby(BuildContext context, int code) async {
-    if (_lobbies.containsKey(code)) {
-      joinCode = code;
-      notifyListeners();
+  Future<bool> joinLobby(BuildContext context, int? lobbyId) async {
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    try {
+      // Get the current user
+      final currentUser = userViewModel.currentUser;
+      if (currentUser == null) {
+        throw Exception("No user found");
+      }
+      if (lobbyId == null) {
+        throw Exception("Invalid lobby ID");
+      }
+      // Fetch the lobby from the database
+      final lobby = await _lobbyDatabaseService.getLobbyById(lobbyId);
+      if (lobby == null) {
+        return false;
+      }
+      // Check to see if user is already in lobby
+      if (lobby.memberIds.contains(currentUser.id)) return false;
+      // Add the user to the lobby's memberIds
+      final updatedMemberIds = List<int>.from(lobby.memberIds)
+        ..add(currentUser.id!);
+      lobby.memberIds = updatedMemberIds;
+      // Update the lobby in the database
+      await _lobbyDatabaseService.updateLobby(lobby);
+      // Add the lobbyId to the user's lobbyIds
+      final updatedLobbyIds = List<int>.from(currentUser.lobbyIds)
+        ..add(lobbyId);
+      currentUser.lobbyIds = updatedLobbyIds;
+
+      // Update the user in the database
+      await userViewModel.updateUser(currentUser);
+
       return true;
-    }
-    return false;
-  }
-
-  List<String> get movies => _lobbies[joinCode] ?? [];
-
-  void addMovie(String movie) {
-    if (joinCode != null && _lobbies.containsKey(joinCode)) {
-      _lobbies[joinCode]!.add(movie);
-      notifyListeners();
+    } catch (e) {
+      print("Error joining lobby: $e");
+      return false;
     }
   }
 
-  void clearLobby() {
-    joinCode = null;
-    notifyListeners();
+  Future<void> updateLobby(Lobby lobby) async {
+    await _lobbyDatabaseService.updateLobby(lobby);
   }
 
-  List<String>? getLobby(int code) {
-    return _lobbies[code];
-  }
-
-  void storeUserRanking(String userId, List<String> ranking) {
-    if (!userRankings.containsKey(joinCode)) {
-      userRankings[joinCode!] = {};
+  Future<void> addMovie(Lobby lobby, Movie movie) async {
+    if (!lobby.movieIds.contains(movie.movieId)) {
+      lobby.movieIds.add(movie.movieId!);
+      await updateLobby(lobby);
     }
-    userRankings[joinCode]![userId] = ranking;
-
-    //print('Updated rankings for $userId: $ranking');
   }
 
-  List<String> processRankings() {
-    //print('Processing rankings for joinCode: $joinCode');
-    final userRankingsForJoinCode = userRankings[joinCode];
-    //print('All user rankings: $userRankingsForJoinCode');
-    // if (userRankingsForJoinCode == null) { //will not occur? will count default order as ranking
-    //   print("no rankings");
-    //   return [];
-    // }
+  Future<void> storeUserRanking(
+      int lobbyId, int userId, List<int> movieRanking) async {
+    Lobby? lobby = await getLobby(lobbyId);
+    if (lobby == null) {
+      throw Exception("No lobby is currently selected.");
+    }
 
-    // Calculate total scores and average
-    final Map<String, double> movieScores = {};
-    for (var rankings in userRankingsForJoinCode!.values) {
-      for (int i = 0; i < rankings.length; i++) {
-        final movie = rankings[i];
-        movieScores[movie] = (movieScores[movie] ?? 0) + (i + 1);
+    lobby.userRankings[userId] = movieRanking;
+
+    await updateLobby(lobby);
+  }
+
+  Future<List<MapEntry<int, double>>> processRankings(int lobbyId) async {
+    final lobby = await getLobby(lobbyId);
+    if (lobby == null) {
+      throw Exception("Lobby with ID $lobbyId not found");
+    }
+
+    final userRankings = lobby.userRankings;
+    final Map<int, int> positionSums = {};
+    final Map<int, int> counts = {};
+
+    // Calculate total scores and counts for each movie
+    for (var rankings in userRankings.values) {
+      for (int position = 0; position < rankings.length; position++) {
+        final movieId = rankings[position];
+        positionSums[movieId] = (positionSums[movieId] ?? 0) + position + 1;
+        counts[movieId] = (counts[movieId] ?? 0) + 1;
       }
     }
 
-    // Compute averages
-    final averageScores = movieScores.map((movie, score) {
-      final count = userRankingsForJoinCode.values
-          .where((ranking) => ranking.contains(movie))
-          .length;
-      return MapEntry(movie, score / count);
+    // Calculate average scores
+    final Map<int, double> averageScores = positionSums.map((movieId, total) {
+      final count = counts[movieId] ?? 1;
+      return MapEntry(movieId, total / count);
     });
 
-    // Sort movies by average score
+    // Sort movies by their average scores in ascending order
     final sortedMovies = averageScores.entries.toList()
       ..sort((a, b) => a.value.compareTo(b.value));
 
-    return sortedMovies.map((entry) => entry.key).toList();
+    return sortedMovies;
   }
 }

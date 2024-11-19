@@ -13,4 +13,8 @@ class MovieViewModel extends ChangeNotifier {
   Future<List<Movie>> search(String query) async {
     return _movieDatabaseService.searchMoviesByTitle(query);
   }
+
+  Future<Movie?> getMovie(int id) async {
+    return _movieDatabaseService.getMovieById(id);
+  }
 }

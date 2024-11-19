@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movwe/viewmodels/movie_viewmodel.dart';
+import 'package:movwe/views/current_lobby_view.dart';
 import 'package:movwe/views/join_lobby_view.dart';
 import 'package:movwe/views/login_view.dart';
 import 'package:movwe/views/search_view.dart';
 import 'package:provider/provider.dart';
 import 'package:movwe/views/ranking_view.dart';
 import '../models/movie_model.dart';
-import '../viewmodels/lobby_viewmodel.dart';
 import '../viewmodels/user_viewmodel.dart';
 import 'movie_details_view.dart';
 
@@ -86,25 +86,6 @@ class _HomeViewState extends State<HomeView> {
               },
               child: const Text('Close'),
             ),
-            TextButton(
-              onPressed: () {
-                // final lobbyViewModel =
-                //     Provider.of<LobbyViewModel>(context, listen: false);
-                // lobbyViewModel.addMovie(movie.title);
-                // Navigator.of(context).pop();
-                // ScaffoldMessenger.of(context).showSnackBar(
-                //   SnackBar(content: Text('${movie.title} added to lobby!')),
-                // );
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content: Text(
-                          '${movie.title} Need to Implement Functionality!')),
-                );
-                // If user has joined any lobbies, should prompt user to select a lobby to add the movie to
-                // else, prompt user to create a lobby
-              },
-              child: const Text('Add to Lobby'),
-            ),
           ],
         );
       },
@@ -166,17 +147,16 @@ class _HomeViewState extends State<HomeView> {
               },
               label: const Text('Profile'),
               icon: const Icon(Icons.person)),
-          // TextButton.icon(
-          //   onPressed: () {
-          //     // Navigate to the RankingView
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => const RankingView()),
-          //     );
-          //   },
-          //   label: const Text('Go to Ranking'),
-          //   icon: const Icon(Icons.star),
-          // ),
+          TextButton.icon(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CurrentLobbyView()),
+                );
+              },
+              label: const Text('Lobby'),
+              icon: const Icon(Icons.group)),
           TextButton.icon(
               onPressed: _logout,
               label: const Text('Logout'),
@@ -217,7 +197,10 @@ class _HomeViewState extends State<HomeView> {
         itemBuilder: (context, index) {
           final movie = movies[index];
           return GestureDetector(
-            onTap: () => _showMovieDetails(movie),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => MovieDetailsView(movie: movie),
+            ),
             child: Card(
               child: Column(
                 children: [

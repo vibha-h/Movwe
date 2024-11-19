@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './home_view.dart';
 import '../viewmodels/lobby_viewmodel.dart';
-import './current_lobby_view.dart';
 
 class LobbyView extends StatefulWidget {
   const LobbyView({super.key});
@@ -27,7 +26,7 @@ class _LobbyViewState extends State<LobbyView> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeView()),
+                MaterialPageRoute(builder: (context) => const HomeView()),
               );
             },
           ),
@@ -52,18 +51,11 @@ class _LobbyViewState extends State<LobbyView> {
                 if (joinCode != null) {
                   bool success =
                       await lobbyViewModel.joinLobby(context, joinCode);
-                  if (success) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CurrentLobbyView(),
-                      ),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Failed to join lobby.")),
-                    );
-                  }
+                  String message =
+                      success ? "Joined Lobby!" : "Failed to join lobby.";
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(message)),
+                  );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Invalid join code.")),
