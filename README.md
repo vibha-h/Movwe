@@ -5,28 +5,57 @@ Currently an alpha prototype... More UI improvements and features to come
 
 Movwe is a movie app used to help groups of friends decide which movie to watch. Users form "lobbies", and add their favorite movies to the lobby's movie list. After finalizing the movie list, users can then personally rank the movies in order of preference. After each user in a lobby has ranked the movies, a "final rankings" list will be generated to determine which movie the group should watch.
 
-
-
-
-
 ## Authors
 
 - [@GriffinMcCool](https://github.com/GriffinMcCool)
 - [@vibha-h](https://github.com/vibha-h)
 - [@Mirla-03](https://github.com/Mirla03)
 
+## Design Changes
+
+IMPORTANT: The app currently only works on a Windows emulator. We planned (and still do plan) to have the app working for the Android emulator, but we are dealing with issues at the moment. For some reason, our database dependencies are not allowing the app to be run on the Android emulator, so it is currently only a desktop app. Thus, some of the design is more suited for a desktop app for the alpha prototype, which we still plan to change. For example, our taskbar is currently at the top of the screen instead of the bottom. Once we figure out this issue with the Android emulator, the app will be reconfigured.
+
+## Running the App
+
+Prerequisites:
+
+- Windows machine
+- VSCode with Flutter extension
+- Virtualization enabled on device
+
+Steps:
+
+    1. Download .zip file (if you're reading this, you've likely already done so)
+    2. Unzip folder to desired location
+    3. Open folder in VSCode
+    4. In VSCode terminal, navigate to ../Movwe
+    5. In VSCode terminal run 'flutter clean'
+    6. Run 'flutter pub get'
+    7. Run 'flutter run'
+    8. IMPORTANT: Select Windows (app is currently only supported on Windows emulator)
+    9. The application will open in a separate window
+
 
 ## Key Tasks in Demo (DEV 3)
 
 - Create account
+    - Create an account with username and password to login with 
 - Login
+    - Log in with a unique existing account
 - Browse movies
+    - View list of available movies
 - Search movies
+    - Search available movies by title
 - View movie details
+    - Select a movie to view title, description, ratings, etc.
 - Create lobby
+    - Create a lobby with a unique ID for your friends to join
 - Join lobby
+    - Use a friend's lobby ID to join their lobby
 - Add movie to lobby
+    - When viewing a movie's details or on the lobby page, add movies to a lobby's movie list
 - Rank moives
+    - Order the list of movies in a specific lobby by preference
 - TODO User Profiles & Statistics
 
 
