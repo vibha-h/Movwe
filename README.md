@@ -56,7 +56,8 @@ Steps:
     - When viewing a movie's details or on the lobby page, add movies to a lobby's movie list
 - Rank moives
     - Order the list of movies in a specific lobby by preference
-- TODO User Profiles & Statistics
+- (Not included for DEV 3) Create custom movie
+- (Not included for DEV 3) User Profiles & Statistics
 
 
 ### Create Account
