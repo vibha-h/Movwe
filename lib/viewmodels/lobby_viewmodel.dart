@@ -69,6 +69,7 @@ class LobbyViewModel extends ChangeNotifier {
       // Fetch the lobby from the database
       final lobby = await _lobbyDatabaseService.getLobbyById(lobbyId);
       if (lobby == null) {
+        print('lobby $lobbyId not found');
         return false;
       }
       // Check to see if user is already in lobby

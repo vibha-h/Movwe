@@ -53,6 +53,7 @@ class _LobbyViewState extends State<LobbyView> {
                       await lobbyViewModel.joinLobby(context, joinCode);
                   String message =
                       success ? "Joined Lobby!" : "Failed to join lobby.";
+                  print('joinCode: $joinCode');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(message)),
                   );
