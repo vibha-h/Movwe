@@ -9,7 +9,9 @@ import './ranking_view.dart';
 import 'home_view.dart';
 
 class CurrentLobbyView extends StatefulWidget {
-  const CurrentLobbyView({super.key});
+  final int? initialLobbyId;
+
+  const CurrentLobbyView({super.key, this.initialLobbyId});
 
   @override
   State<CurrentLobbyView> createState() => _CurrentLobbyViewState();
@@ -25,6 +27,14 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
 
   List<Movie> _searchResults = [];
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialLobbyId != null) {
+      _updateSelectedLobby(context, widget.initialLobbyId);
+    }
+  }
 
   Future<void> _updateSelectedLobby(BuildContext context, int? id) async {
     if (id != null) {

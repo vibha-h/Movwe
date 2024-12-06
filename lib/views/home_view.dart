@@ -3,9 +3,9 @@ import 'package:movwe/viewmodels/movie_viewmodel.dart';
 import 'package:movwe/views/current_lobby_view.dart';
 import 'package:movwe/views/join_lobby_view.dart';
 import 'package:movwe/views/login_view.dart';
+import 'package:movwe/views/profile_view.dart';
 import 'package:movwe/views/search_view.dart';
 import 'package:provider/provider.dart';
-import 'package:movwe/views/ranking_view.dart';
 import '../models/movie_model.dart';
 import '../viewmodels/user_viewmodel.dart';
 import 'movie_details_view.dart';
@@ -143,7 +143,10 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.group_add)),
           TextButton.icon(
               onPressed: () {
-                // Implement user profile functionality here
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfileView()),
+                );
               },
               label: const Text('Profile'),
               icon: const Icon(Icons.person)),

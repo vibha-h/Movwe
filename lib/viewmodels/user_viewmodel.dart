@@ -28,7 +28,7 @@ class UserViewModel extends ChangeNotifier {
       final user = User(
           username: username,
           password: password,
-          profilePic: 'image.png',
+          profilePic: '',
           topGenres: [],
           lobbyIds: []);
 
