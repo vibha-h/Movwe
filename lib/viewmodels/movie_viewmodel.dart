@@ -17,4 +17,8 @@ class MovieViewModel extends ChangeNotifier {
   Future<Movie?> getMovie(int id) async {
     return _movieDatabaseService.getMovieById(id);
   }
+
+  Future<int> addMovie(Movie movie) async {
+    return _movieDatabaseService.addMovie(movie);
+  }
 }

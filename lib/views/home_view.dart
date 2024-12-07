@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movwe/viewmodels/movie_viewmodel.dart';
+import 'package:movwe/views/add_movie_view.dart';
 import 'package:movwe/views/current_lobby_view.dart';
 import 'package:movwe/views/join_lobby_view.dart';
 import 'package:movwe/views/login_view.dart';
@@ -166,27 +167,10 @@ class _HomeViewState extends State<HomeView> {
               icon: const Icon(Icons.logout_sharp)),
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              // Placeholder for adding movie functionality
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Add Movie'),
-                    content:
-                        const Text('Functionality will be implemented later.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Close'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AddMovieView(),
+            ),
           ),
         ],
       ),

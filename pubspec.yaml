@@ -76,6 +76,7 @@ flutter:
     - assets/images/gladiator.jpg
     - assets/images/dune.jpg
     - assets/images/defaultProfilePic.jpg
+    - assets/images/defaultMoviePoster.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
