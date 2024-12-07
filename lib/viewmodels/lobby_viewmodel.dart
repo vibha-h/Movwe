@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movwe/models/user_model.dart';
 import 'package:movwe/services/lobby_database_service.dart';
 import 'package:movwe/viewmodels/user_viewmodel.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import '../models/lobby_model.dart';
 import '../models/movie_model.dart';
