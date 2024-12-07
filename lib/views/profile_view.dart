@@ -3,9 +3,7 @@ import 'package:movwe/views/current_lobby_view.dart';
 import 'package:movwe/views/home_view.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
-import '../models/lobby_model.dart';
 import '../viewmodels/user_viewmodel.dart';
-import '../viewmodels/lobby_viewmodel.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -13,7 +11,6 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userViewModel = Provider.of<UserViewModel>(context, listen: false);
-    final lobbyViewModel = Provider.of<LobbyViewModel>(context, listen: false);
 
     final User currentUser = userViewModel.currentUser!;
 
@@ -97,7 +94,7 @@ class ProfileView extends StatelessWidget {
                     children: currentUser.lobbyIds.map((lobbyId) {
                       return GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>

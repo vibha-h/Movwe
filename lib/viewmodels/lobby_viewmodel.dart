@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movwe/models/user_model.dart';
 import 'package:movwe/services/lobby_database_service.dart';
 import 'package:movwe/viewmodels/user_viewmodel.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import '../models/lobby_model.dart';
 import '../models/movie_model.dart';
@@ -57,21 +58,21 @@ class LobbyViewModel extends ChangeNotifier {
 
   Future<bool> joinLobby(BuildContext context, int? lobbyId) async {
     final userViewModel = Provider.of<UserViewModel>(context, listen: false);
-    try {
-      // Get the current user
-      final currentUser = userViewModel.currentUser;
-      if (currentUser == null) {
-        throw Exception("No user found");
-      }
-      if (lobbyId == null) {
-        throw Exception("Invalid lobby ID");
-      }
-      // Fetch the lobby from the database
-      final lobby = await _lobbyDatabaseService.getLobbyById(lobbyId);
-      if (lobby == null) {
-        print('lobby $lobbyId not found');
-        return false;
-      }
+    // Get the current user
+    final currentUser = userViewModel.currentUser;
+    if (currentUser == null) {
+      throw Exception("No user found");
+    }
+    if (lobbyId == null) {
+      throw Exception("Invalid lobby ID");
+    }
+    // Fetch the lobby from the database
+    final lobby = await _lobbyDatabaseService.getLobbyById(lobbyId);
+    if (lobby == null) {
+      throw Exception('Lobby $lobbyId not found');
+    }
+
+    if (lobby.status == "OPEN") {
       // Check to see if user is already in lobby
       if (lobby.memberIds.contains(currentUser.id)) return false;
       // Add the user to the lobby's memberIds
@@ -80,18 +81,13 @@ class LobbyViewModel extends ChangeNotifier {
       lobby.memberIds = updatedMemberIds;
       // Update the lobby in the database
       await _lobbyDatabaseService.updateLobby(lobby);
-      // Add the lobbyId to the user's lobbyIds
-      final updatedLobbyIds = List<int>.from(currentUser.lobbyIds)
-        ..add(lobbyId);
-      currentUser.lobbyIds = updatedLobbyIds;
 
-      // Update the user in the database
-      await userViewModel.updateUser(currentUser);
+      // Add the lobbyId to the user's lobbyIds
+      await userViewModel.addLobby(lobbyId);
 
       return true;
-    } catch (e) {
-      print("Error joining lobby: $e");
-      return false;
+    } else {
+      throw Exception("Join failed: Lobby $lobbyId has been finalized.");
     }
   }
 
@@ -100,9 +96,13 @@ class LobbyViewModel extends ChangeNotifier {
   }
 
   Future<void> addMovie(Lobby lobby, Movie movie) async {
-    if (!lobby.movieIds.contains(movie.movieId)) {
-      lobby.movieIds.add(movie.movieId!);
-      await updateLobby(lobby);
+    if (lobby.status == "OPEN") {
+      if (!lobby.movieIds.contains(movie.movieId)) {
+        lobby.movieIds.add(movie.movieId!);
+        await updateLobby(lobby);
+      }
+    } else {
+      throw Exception("The lobby has been finalized.");
     }
   }
 
@@ -148,5 +148,50 @@ class LobbyViewModel extends ChangeNotifier {
       ..sort((a, b) => a.value.compareTo(b.value));
 
     return sortedMovies;
+  }
+
+  Future<bool> removeUserFromLobby(
+      BuildContext context, Lobby lobby, User user) async {
+    try {
+      final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+
+      // remove lobby from user
+      userViewModel.removeLobby(user, lobby.lobbyId!);
+
+      // remove user from lobby
+      lobby.memberIds.remove(user.id);
+      updateLobby(lobby);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> updateStatus(Lobby lobby, String status) async {
+    lobby.status = status;
+
+    updateLobby(lobby);
+  }
+
+  Future<void> resetRankings(Lobby lobby) async {
+    lobby.userRankings = {};
+
+    updateLobby(lobby);
+  }
+
+  Future<void> deleteLobby(
+      BuildContext context, Lobby lobby, User currentUser) async {
+    final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+
+    for (int memberId in lobby.memberIds) {
+      final user = await userViewModel.getUser(memberId);
+
+      if (user != null && lobby.adminId != user.id) {
+        await userViewModel.removeLobby(user, lobby.lobbyId!);
+      }
+    }
+
+    await removeUserFromLobby(context, lobby, currentUser);
+    await _lobbyDatabaseService.deleteLobby(lobby.lobbyId!);
   }
 }

@@ -120,8 +120,14 @@ class MovieDetailsView extends StatelessWidget {
         );
       }
     } catch (e) {
+      String errorMessage = 'Error adding movie to lobby.';
+
+      if (e is Exception) {
+        errorMessage = e.toString();
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error adding movie to lobby.')),
+        SnackBar(content: Text(errorMessage)),
       );
     }
   }

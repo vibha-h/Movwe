@@ -48,18 +48,28 @@ class _LobbyViewState extends State<LobbyView> {
             ElevatedButton(
               onPressed: () async {
                 final joinCode = int.tryParse(_joinCodeController.text);
-                if (joinCode != null) {
-                  bool success =
-                      await lobbyViewModel.joinLobby(context, joinCode);
-                  String message =
-                      success ? "Joined Lobby!" : "Failed to join lobby.";
-                  print('joinCode: $joinCode');
+                try {
+                  if (joinCode != null) {
+                    bool success =
+                        await lobbyViewModel.joinLobby(context, joinCode);
+                    String message =
+                        success ? "Joined Lobby!" : "Failed to join lobby.";
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(message)),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Invalid join code.")),
+                    );
+                  }
+                } catch (e) {
+                  String errorMessage = 'An error occurred';
+                  if (e is Exception) {
+                    errorMessage = e.toString();
+                  }
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(message)),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Invalid join code.")),
+                    SnackBar(content: Text(errorMessage)),
                   );
                 }
               },

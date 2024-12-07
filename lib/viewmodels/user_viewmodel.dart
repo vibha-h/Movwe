@@ -80,4 +80,17 @@ class UserViewModel extends ChangeNotifier {
   Future<List<int>> getLobbyIdsForCurrentUser() async {
     return currentUser!.lobbyIds;
   }
+
+  Future<void> addLobby(int lobbyId) async {
+    final updatedLobbyIds = List<int>.from(currentUser!.lobbyIds)..add(lobbyId);
+    currentUser!.lobbyIds = updatedLobbyIds;
+
+    updateUser(currentUser!);
+  }
+
+  Future<void> removeLobby(User user, int lobbyId) async {
+    user.lobbyIds.remove(lobbyId);
+
+    updateUser(user);
+  }
 }

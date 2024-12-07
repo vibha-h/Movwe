@@ -22,6 +22,7 @@ class LobbyDatabaseService {
     return null;
   }
 
+  // Update lobby
   Future<int> updateLobby(Lobby lobby) async {
     final db = await DatabaseService.database;
     return await db.update(
@@ -29,6 +30,16 @@ class LobbyDatabaseService {
       lobby.toMap(),
       where: 'id = ?',
       whereArgs: [lobby.lobbyId],
+    );
+  }
+
+  // Delete a lobby
+  Future<int> deleteLobby(int lobbyId) async {
+    final db = await DatabaseService.database;
+    return await db.delete(
+      'lobbies',
+      where: 'id = ?',
+      whereArgs: [lobbyId],
     );
   }
 }
