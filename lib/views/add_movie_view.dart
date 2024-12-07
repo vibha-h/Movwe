@@ -94,14 +94,13 @@ class _AddMovieViewState extends State<AddMovieView> {
                   IMDbRating: imdbRating,
                 );
 
-                // Add the movie to the database (call your viewmodel or database service)
+                // Add the movie to the database
                 final movieViewModel = MovieViewModel();
                 await movieViewModel.addMovie(newMovie);
 
                 // Close the dialog
                 Navigator.of(context).pop();
 
-                // Optionally, show a success message
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Movie added successfully!")),
                 );

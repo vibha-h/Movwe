@@ -124,7 +124,7 @@ class _HomeViewState extends State<HomeView> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              // Implement search functionality here
+              // search
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const SearchView()),
@@ -133,7 +133,6 @@ class _HomeViewState extends State<HomeView> {
           ),
           TextButton.icon(
               onPressed: () {
-                // Implement lobby join/create functionality here
                 //redirect to lobby view
                 Navigator.pushReplacement(
                   context,
