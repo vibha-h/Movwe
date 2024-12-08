@@ -58,6 +58,21 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+  - family: Parkinsans
+    fonts:
+      - asset: assets/fonts/Parkinsans/static/Parkinsans-Medium.ttf
+        weight: 400
+      - asset: assets/fonts/Parkinsans/static/Parkinsans-Bold.ttf
+        weight: 400
+      - asset: assets/fonts/Parkinsans/static/Parkinsans-ExtraBold.ttf
+        weight: 300
+      - asset: assets/fonts/Parkinsans/static/Parkinsans-SemiBold.ttf
+        weight: 300
+      - asset: assets/fonts/Parkinsans/static/Parkinsans-Regular.ttf
+        weight: 300
+      - asset: assets/fonts/Parkinsans/static/Parkinsans-Light.ttf
+        weight: 200
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
