@@ -59,6 +59,10 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   fonts:
+  - family: Meddon
+    fonts:
+      - asset: assets/fonts/Meddon/Meddon-Regular.ttf
+        weight: 500
   - family: Parkinsans
     fonts:
       - asset: assets/fonts/Parkinsans/static/Parkinsans-Medium.ttf
