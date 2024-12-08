@@ -59,15 +59,24 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Welcome to Movwe!"),
-        centerTitle: true,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+              'assets/images/LOGO.jpg',
+              width: 150,
+              height: 150, 
+              ),
+              SizedBox(height: 20), // Adjust this value to control how far down the title is
+              Text(
+                "Welcome to Movwe!",
+                style: const TextStyle(
+                  fontSize: 60,
+                ),
+             ),
+            const SizedBox(height: 20), // Space between the title and inputs
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(labelText: "Username"),
