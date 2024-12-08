@@ -71,9 +71,10 @@ class _LoginViewState extends State<LoginView> {
               ),
               SizedBox(height: 20), // Adjust this value to control how far down the title is
               Text(
-                "Welcome to Movwe!",
+                "MovWe",
                 style: const TextStyle(
-                  fontSize: 60,
+                  fontSize: 45,
+                  fontFamily: 'Meddon',
                 ),
              ),
             const SizedBox(height: 20), // Space between the title and inputs
