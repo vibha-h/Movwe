@@ -1,8 +1,5 @@
 
 # Movwe
-
-Currently an alpha prototype... More UI improvements and features to come
-
 Movwe is a movie app used to help groups of friends decide which movie to watch. Users form "lobbies", and add their favorite movies to the lobby's movie list. After finalizing the movie list, users can then personally rank the movies in order of preference. After each user in a lobby has ranked the movies, a "final rankings" list will be generated to determine which movie the group should watch.
 
 ## Authors
@@ -32,7 +29,7 @@ Steps:
     5. In VSCode terminal run 'flutter clean'
     6. Run 'flutter pub get'
     7. Run 'flutter run'
-    8. IMPORTANT: Select Windows (app is currently only supported on Windows emulator)
+    8. IMPORTANT: Select Windows emulator
     9. The application will open in a separate window
 
 
@@ -56,8 +53,10 @@ Steps:
     - When viewing a movie's details or on the lobby page, add movies to a lobby's movie list
 - Rank moives
     - Order the list of movies in a specific lobby by preference
-- (Not included for DEV 3) Create custom movie
-- (Not included for DEV 3) User Profiles & Statistics
+- Create custom movie
+    - Add movies that are not found in the IMDb API 
+-  User Profiles & Statistics
+    - Username, most liked genres, and all previous lobbies joined listed
 
 
 ### Create Account
@@ -127,3 +126,31 @@ Steps:
     6. Use the sliders on the right to order the movies by preference (Top is favorite)
     7. Press the green check mark to submit rankings
 
+## Formal Description: MVP
+
+### MVP
+    1. Login: Users can create and log into profiles that save all their data and settings.
+
+    2. Movie select:  While browsing listed movies, users can click an "Add Movie" button to select a movie and assign it to a lobby for ranking!
+
+    3. (Not MVP) Movie details: Clicking on a movie reveals detailed information, including the title, description, genre, content rating, and IMDb rating.
+
+    4. Group Ranking: In a lobby, users collaboratively rank movies. Once the host finalizes the process, the winner is determined based on the average of all users' rankings.
+
+    5. (Not MVP) User Profile: Displays a user’s top genres and lists previous lobbies instead of individual movie ratings.
+
+    6. Add a Movie: On the Home page, users can click an "Add Movie" button to input detailed information, exactly like the data shown in the Movie Details view.
+
+    7. Search function:  Users can search for movies not displayed on the Home page, including those available through the API or added manually by the user.
+
+    8. Scan/Enter Code: While the QR scanning feature is still under development, users can join a lobby using a code generated when the host creates the lobby.
+
+    9. Lobby Homepage:  When entering a lobby, users can view all movies added to that lobby and add more movies directly from this screen.
+
+    10. Personal Rankings: Users rank movies individually, contributing to the final results calculated as the average of all the participant's rankings.
+
+### Changes of MVP: 
+
+The majority of our project remains unchanged, however during the course of this semester, we had run into some bugs and stylistic changes. The main issue we ran into during this project is the web app design change. Originally, we had hoped to make this an android-based app. However, after a considerable effort to solve this problem, we decided to prioritize implementing core functionality and creating a well-designed web app.
+The second change was the subsituition of user's ratings for previous lobbies. We felt that listing past lobbies would be more valuable and appreciated by users. This was more of a style choice as user's rating could have been implemented instead and was ultimately set aside. 
+The last slight change are the bugs encountered with QR scanning functionality. While we are currently continuing to resolve these issues, the join code feature is fully functional. This ensures that the app's core functionality is unaffected even if the QR scanner isn't working perfectly.
