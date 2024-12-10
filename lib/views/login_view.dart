@@ -69,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
               width: 150,
               height: 150, 
               ),
-              SizedBox(height: 20), // Adjust this value to control how far down the title is
+              SizedBox(height: 4), // Adjust this value to control how far down the title is
               Text(
                 "MovWe",
                 style: const TextStyle(
@@ -77,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
                   fontFamily: 'Meddon',
                 ),
              ),
-            const SizedBox(height: 20), // Space between the title and inputs
+            const SizedBox(height: 10), // Space between the title and inputs
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(labelText: "Username"),
