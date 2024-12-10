@@ -125,25 +125,25 @@ Steps:
 ## Formal Description: MVP
 
 ### MVP
-    1. Login: Users can create and log into profiles that save all their data and settings.
+    - Login: Users can create and log into profiles that save all their data and settings.
 
-    2. Movie select:  While browsing listed movies, users can click an "Add Movie" button to select a movie and assign it to a lobby for ranking!
+    - Movie select:  While browsing listed movies, users can click an "Add Movie" button to select a movie and assign it to a lobby for ranking!
 
-    3. (Not MVP) Movie details: Clicking on a movie reveals detailed information, including the title, description, genre, content rating, and IMDb rating.
+    - (Not MVP) Movie details: Clicking on a movie reveals detailed information, including the title, description, genre, content rating, and IMDb rating.
 
-    4. Group Ranking: In a lobby, users collaboratively rank movies. Once the host finalizes the process, the winner is determined based on the average of all users' rankings.
+    - Group Ranking: In a lobby, users collaboratively rank movies. Once the host finalizes the process, the winner is determined based on the average of all users' rankings.
 
-    5. (Not MVP) User Profile: Displays a user’s top genres and lists previous lobbies instead of individual movie ratings.
+    - (Not MVP) User Profile: Displays a user’s top genres and lists previous lobbies instead of individual movie ratings.
 
-    6. Add a Movie: On the Home page, users can click an "Add Movie" button to input detailed information, exactly like the data shown in the Movie Details view.
+    - Add a Movie: On the Home page, users can click an "Add Movie" button to input detailed information, exactly like the data shown in the Movie Details view.
 
-    7. Search function:  Users can search for movies not displayed on the Home page, including those available through the API or added manually by the user.
+    - Search function:  Users can search for movies not displayed on the Home page, including those available through the API or added manually by the user.
 
-    8. Scan/Enter Code: While the QR scanning feature is still under development, users can join a lobby using a code generated when the host creates the lobby.
+    - Scan/Enter Code: While the QR scanning feature is still under development, users can join a lobby using a code generated when the host creates the lobby.
 
-    9. Lobby Homepage:  When entering a lobby, users can view all movies added to that lobby and add more movies directly from this screen.
+    - Lobby Homepage:  When entering a lobby, users can view all movies added to that lobby and add more movies directly from this screen.
 
-    10. Personal Rankings: Users rank movies individually, contributing to the final results calculated as the average of all the participant's rankings.
+    - Personal Rankings: Users rank movies individually, contributing to the final results calculated as the average of all the participant's rankings.
 
 ### Changes of MVP: 
 
