@@ -8,10 +8,6 @@ Movwe is a movie app used to help groups of friends decide which movie to watch.
 - [@vibha-h](https://github.com/vibha-h)
 - [@Mirla-03](https://github.com/Mirla03)
 
-## Design Changes
-
-IMPORTANT: The app currently only works on a Windows emulator. We planned (and still do plan) to have the app working for the Android emulator, but we are dealing with issues at the moment. For some reason, our database dependencies are not allowing the app to be run on the Android emulator, so it is currently only a desktop app. Thus, some of the design is more suited for a desktop app for the alpha prototype, which we still plan to change. For example, our taskbar is currently at the top of the screen instead of the bottom. Once we figure out this issue with the Android emulator, the app will be reconfigured.
-
 ## Running the App
 
 Prerequisites:
