@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:movwe/models/user_model.dart';
 import 'package:provider/provider.dart';
@@ -281,6 +283,37 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
                 },
                 child: const Text("Rank Movies"),
               ),
+              ElevatedButton(
+                //from movie list, pick a random winner
+                onPressed: () {
+                  final random = Random();
+                  final winner = movieList[random.nextInt(movieList.length)];
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Winner"),
+                        content: Text("The winner is ${winner?.title}!"),
+                        icon: Image.asset(
+                          winner!.moviePoster,
+                          width: 150,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text("Pick Random Winner"),
+              ),
               const SizedBox(height: 8),
               if (_selectedLobby!.adminId == _getCurrentuser(context).id) ...[
                 ElevatedButton(
@@ -295,6 +328,20 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
             ],
             if (_selectedLobby!.adminId == _getCurrentuser(context).id &&
                 _selectedLobby!.status == "OPEN") ...[
+              ElevatedButton(
+                onPressed: () {
+                  //go to ranking view
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RankingView(
+                        selectedLobby: _selectedLobby!,
+                      ),
+                    ),
+                  );
+                },
+                child: const Text("Rank Movies"),
+              ),
               ElevatedButton(
                 onPressed: () {
                   lobbyViewModel.updateStatus(_selectedLobby!, "FINALIZED");
@@ -316,7 +363,7 @@ Future<bool> _showConfirmationDialog(BuildContext context) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Confirmation'),
-        content: const Text('Are you sure you want to perform this action?'),
+        content: const Text('Are you sure you want to leave this lobby?'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
