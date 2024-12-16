@@ -50,9 +50,9 @@ Steps:
 - Rank moives
     - Order the list of movies in a specific lobby by preference
 - Create custom movie
-    - Add movies that are not found in the IMDb API 
--  User Profiles & Statistics
-    - Username, most liked genres, and all previous lobbies joined listed
+    - Add movies that are not already included on the platform
+-  User Profiles _& Statistics_
+    - Username, _most liked genres_, and all previous lobbies joined listed
 
 
 ### Create Account
