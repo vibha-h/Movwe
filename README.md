@@ -45,8 +45,16 @@ Steps:
     - Create a lobby with a unique ID for your friends to join
 - Join lobby
     - Use a friend's lobby ID to join their lobby
+- Leave lobby
+    - Leave a specific lobby and remove it from the user's lobby list
 - Add movie to lobby
     - When viewing a movie's details or on the lobby page, add movies to a lobby's movie list
+- Remove movie from lobby
+    - When on the lobby page, a movie can be removed from the movie list by any lobby member
+- Finalize lobby
+    - The owner of the lobby can "finalize" the lobby, preventing new users from joining and adding movies
+- Delete lobby
+    - The owner of the lobby can delete the lobby, removing it from all members' lobby lists 
 - Rank moives
     - Order the list of movies in a specific lobby by preference
 - Create custom movie
