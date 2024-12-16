@@ -139,7 +139,7 @@ Steps:
 
 - Search function:  Users can search for movies not displayed on the Home page, including those available through the API or added manually by the user.
 
-- Scan/Enter Code: While the QR scanning feature is still under development, users can join a lobby using a code generated when the host creates the lobby.
+- Enter Code: Users can join a lobby using a code generated when the host creates the lobby.
 
 - Lobby Homepage:  When entering a lobby, users can view all movies added to that lobby and add more movies directly from this screen.
 
