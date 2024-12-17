@@ -16,7 +16,6 @@ class _LobbyViewState extends State<LobbyView> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   String? scannedJoinCode;
 
-
   @override
   Widget build(BuildContext context) {
     final lobbyViewModel = Provider.of<LobbyViewModel>(context);
@@ -93,29 +92,6 @@ class _LobbyViewState extends State<LobbyView> {
               child: const Text('Create New Lobby'),
             ),
             const SizedBox(height: 20),
-          ElevatedButton.icon(
-              icon: const Icon(Icons.qr_code_scanner),
-              label: const Text('Scan QR Code'),
-              onPressed: () async {
-                // Navigate to the QR code scanner view
-                final scannedCode = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QRScannerView(qrKey: qrKey),
-                  ),
-                );
-
-                if (scannedCode != null) {
-                  setState(() {
-                    _joinCodeController.text = scannedCode; // Autofill join code
-                  });
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Scanned Code: $scannedCode")),
-                  );
-                }
-              },
-            ),
           ],
         ),
       ),

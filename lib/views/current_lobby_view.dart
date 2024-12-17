@@ -283,6 +283,7 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
                 },
                 child: const Text("Rank Movies"),
               ),
+              const SizedBox(height: 8),
               ElevatedButton(
                 //from movie list, pick a random winner
                 onPressed: () {
@@ -292,13 +293,23 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text("Winner"),
-                        content: Text("The winner is ${winner?.title}!"),
-                        icon: Image.asset(
-                          winner!.moviePoster,
-                          width: 150,
-                          height: 200,
-                          fit: BoxFit.cover,
+                        title: const Center(
+                          child: Text("Winner:"),
+                        ),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                winner!.moviePoster,
+                                height: 200,
+                                width: 150,
+                                fit: BoxFit.cover,
+                              ),
+                              const SizedBox(height: 10),
+                              Text("The winner is ${winner.title}!"),
+                            ],
+                          ),
                         ),
                         actions: [
                           TextButton(
@@ -328,20 +339,6 @@ class _CurrentLobbyViewState extends State<CurrentLobbyView> {
             ],
             if (_selectedLobby!.adminId == _getCurrentuser(context).id &&
                 _selectedLobby!.status == "OPEN") ...[
-              ElevatedButton(
-                onPressed: () {
-                  //go to ranking view
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RankingView(
-                        selectedLobby: _selectedLobby!,
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("Rank Movies"),
-              ),
               ElevatedButton(
                 onPressed: () {
                   lobbyViewModel.updateStatus(_selectedLobby!, "FINALIZED");
