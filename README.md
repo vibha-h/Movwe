@@ -41,10 +41,14 @@ Steps:
     - Search available movies by title
 - View movie details
     - Select a movie to view title, description, ratings, etc.
+- View user profiles _& statistics_
+    - Username, _most liked genres_, and all previous lobbies joined listed
 - Create lobby
     - Create a lobby with a unique ID for your friends to join
 - Join lobby
     - Use a friend's lobby ID to join their lobby
+- View lobby
+    - View the name and movie list of a lobby
 - Leave lobby
     - Leave a specific lobby and remove it from the user's lobby list
 - Add movie to lobby
@@ -59,8 +63,8 @@ Steps:
     - Order the list of movies in a specific lobby by preference
 - Create custom movie
     - Add movies that are not already included on the platform
--  User Profiles _& Statistics_
-    - Username, _most liked genres_, and all previous lobbies joined listed
+- Pick a random movie
+    - Select a random movie from the lobby's list of movies
 
 
 ### Create Account
@@ -96,6 +100,11 @@ Steps:
     2. Either browse or search for a movie (See "Browse Movies" and "Search Movies")
     3. Click on the desired movie to view the movie details
 
+### View User Profile
+
+    1. Login with a valid account (see "Login")
+    2. Click the "profile" button
+
 ### Create Lobby
 
     1. Login with a valid account (see "Login")
@@ -111,6 +120,20 @@ Steps:
     3. In the "Enter Join Code" text box, enter a valid join code
     4. Press "Join Lobby" button
 
+### View Lobby
+
+    1. Join a lobby (see "Join Lobby")
+    2. At home screen, press the "profile" or "lobby" button
+    3. Select the desired lobby
+    
+### Leave Lobby
+
+    1. View a lobby (see "View Lobby")
+    2. Select "Leave Lobby" under the lobby selector dropdown
+    3. On the confirmation page, select "Yes"
+
+    Note: You can't leave a lobby that has been finalized. Please ask the lobby owner to open the lobby if you'd like to leave.
+
 ### Add Movie to Lobby
 
     1. Create or join a lobby (see "Create lobby" or "Join Lobby")
@@ -120,15 +143,59 @@ Steps:
 
     Note: You must be a member of at least one lobby to add a movie
 
+### Remove Movie From Lobby
+
+    1. Add a movie to a lobby (see "Add Movie to Lobby")
+    2. View the lobby (see "View Lobby")
+    3. Click the '-' icon in line with the movie you'd like to remove
+
+    Note: Movies can't be removed from a finalized lobby.
+
+### Finalize Lobby
+
+    1. Create a lobby (see "Create Lobby")
+    2. View the lobby (see "View Lobby")
+    3. Select "Finalize Lobby" at the bottom of the screen
+
+    Note: This action can only be performed by the lobby's owner. Users will no longer be able to join/leave the lobby or add/delete movies.
+
+### Delete Lobby
+
+    1. Create a lobby (see "Create Lobby")
+    2. View the lobby (see "View Lobby")
+    3. Select "Delete Lobby" under the lobby selector dropdown
+    4. On the confirmation page, select "Yes"
+
+    Note: This action can only be performed by the lobby's owner
+
+## Create a Custom Movie
+
+    1. Login with a valid account (see "Login")
+    2. At home screen, press the "+" icon 
+    3. Fill out the form with title, description, genre, content rating, and IMDb Rating
+    4. Press the "Submit" button
+
 ### Rank Movies
 
     1. Create or join a lobby (see "Create lobby" or "Join Lobby")
     2. Ensure at least one movie has been added to the lobby (see "Add Movie to Lobby")
-    3. At home screen, press the "Lobby" button
-    4. At the lobby screen, press the dropdown and select which lobby you would like to view
+    3. View the lobby (see "View Lobby")
+    4. Ensure the lobby has been finalized by the owner (see "Finalize Lobby")
     5. Press the "Rank Movies" button
     6. Use the sliders on the right to order the movies by preference (Top is favorite)
-    7. Press the green check mark to submit rankings
+    7. Press the check mark to submit rankings
+
+    Note: The lobby must be finalized by the host for this function.
+
+### Pick a Random Movie
+
+    1. Create or join a lobby (see "Create lobby" or "Join Lobby")
+    2. Ensure at least one movie has been added to the lobby (see "Add Movie to Lobby")
+    3. View the lobby (see "View Lobby")
+    4. Ensure the lobby has been finalized by the owner (see "Finalize Lobby")
+    5. Press "Pick Random Winner" button
+
+    Note: The lobby must be finalized by the host for this function.
 
 ## Formal Description: MVP
 
